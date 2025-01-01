@@ -166,7 +166,7 @@ struct retro_core_option_v2_definition option_defs_us[] = {
 #if defined(HAVE_CDROM) || defined(USE_ASYNC_CDROM)
 #define V(x) { #x, NULL }
    {
-      "pcsx_rearmed_cd_readahead",
+      "pcsxtreme_hd_turbo_cd_readahead",
       "CD read-ahead",
       NULL,
       "Reads the specified amount of sectors ahead of time to try to avoid later stalls. "
@@ -188,7 +188,7 @@ struct retro_core_option_v2_definition option_defs_us[] = {
 #endif
          { NULL, NULL},
       },
-      "12",
+      "0",
    },
 #undef V
 #endif
@@ -197,7 +197,7 @@ struct retro_core_option_v2_definition option_defs_us[] = {
       "pcsx_rearmed_drc",
       "Dynamic Recompiler",
       NULL,
-      "Dynamically recompile PSX CPU instructions to native instructions. Much faster than using an interpreter, but may be less accurate on some platforms.",
+      "Disable for Night Raid and Expendable and similarly minded games that freeze or crash with drc enabled!  Dynamically recompile PSX CPU instructions to native instructions. Much faster than using an interpreter, but may be less accurate on some platforms.",
       NULL,
       "system",
       {
@@ -209,7 +209,7 @@ struct retro_core_option_v2_definition option_defs_us[] = {
    },
 #if !defined(LIGHTREC) && defined(NDRC_THREAD)
    {
-      "pcsx_rearmed_drc_thread",
+      "pcsxtreme_hd_turbo_drc_thread",
       "DynaRec threading",
       NULL,
       "Run the dynarec on another thread.",
@@ -221,15 +221,15 @@ struct retro_core_option_v2_definition option_defs_us[] = {
          { "enabled",  NULL },
          { NULL, NULL },
       },
-      "auto",
+      "enabled",
    },
 #endif
 #endif // DRC_DISABLE
    {
-      "pcsx_rearmed_psxclock",
+      "pcsxtreme_hd_turbo_reverse_oc",
       "PSX CPU Clock Speed (%)",
       NULL,
-      "Overclock or under-clock the PSX CPU. The value has to be lower than 100 because of some slowdowns (cache misses, hw access penalties, etc.) that are not emulated. Try adjusting this if the game is too slow, too fast or hangs."
+      "Set to 18-20 for games that require drc be disabled, such as Night Raid and Expendable!  Overclock or under-clock the PSX CPU. The value has to be lower than 100 because of some slowdowns (cache misses, hw access penalties, etc.) that are not emulated. Try adjusting this if the game is too slow, too fast or hangs."
 #if defined(HAVE_PRE_ARMV7) && !defined(_3DS)
       " Default is 50."
 #else
@@ -240,6 +240,18 @@ struct retro_core_option_v2_definition option_defs_us[] = {
       "system",
       {
          { "auto", "Auto" },
+         { "18",  NULL },
+         { "19",  NULL },
+         { "20",  NULL },
+         { "21",  NULL },
+         { "22",  NULL },
+         { "23",  NULL },
+         { "24",  NULL },
+         { "25",  NULL },
+         { "26",  NULL },
+         { "27",  NULL },
+         { "28",  NULL },
+         { "29",  NULL },
          { "30",  NULL },
          { "31",  NULL },
          { "32",  NULL },
@@ -313,10 +325,10 @@ struct retro_core_option_v2_definition option_defs_us[] = {
          { "100", NULL },
          { NULL, NULL },
       },
-      "auto",
+      "66",
    },
    {
-      "pcsx_rearmed_dithering",
+      "pcsxtreme_hd_turbo_dithering",
       "Dithering Pattern",
       NULL,
       "Enable emulation of the dithering technique used by the PSX to smooth out color banding artifacts. \"Force\" enables it even if the game turns it off. Increases performance requirements.",
@@ -331,12 +343,12 @@ struct retro_core_option_v2_definition option_defs_us[] = {
 #if defined(_3DS)
       "disabled",
 #else
-      "enabled",
+      "disabled",
 #endif
    },
 #ifdef THREAD_RENDERING
    {
-      "pcsx_rearmed_gpu_thread_rendering",
+      "pcsxtreme_hd_turbo_gpu_thread_rendering",
       "Threaded Rendering",
       NULL,
       "When enabled, runs GPU commands in a secondary thread. 'Synchronous' improves performance while maintaining proper frame pacing. 'Asynchronous' improves performance even further, but may cause dropped frames and increased latency. Produces best results with games that run natively at less than 60 frames per second.",
@@ -348,7 +360,7 @@ struct retro_core_option_v2_definition option_defs_us[] = {
          { "async",    "Asynchronous" },
          { NULL, NULL},
       },
-      "disabled",
+      "async",
    },
 #endif
    {
@@ -396,7 +408,7 @@ struct retro_core_option_v2_definition option_defs_us[] = {
       "33"
    },
    {
-      "pcsx_rearmed_frameskip_interval",
+      "pcsxtreme_hd_turbo_frameskip_interval",
       "Frameskip Interval",
       NULL,
       "Specify the maximum number of frames that can be skipped before a new frame is rendered.",
@@ -415,7 +427,7 @@ struct retro_core_option_v2_definition option_defs_us[] = {
          { "10", NULL },
          { NULL, NULL },
       },
-      "3"
+      "1"
    },
    {
       "pcsx_rearmed_display_fps_v2",
@@ -433,7 +445,7 @@ struct retro_core_option_v2_definition option_defs_us[] = {
       "disabled",
    },
    {
-      "pcsx_rearmed_fractional_framerate",
+      "pcsxtreme_hd_turbo_fractional_framerate",
       "Use fractional frame rate",
       NULL,
       "Instead of the exact 50 or 60 (maximum) fps for PAL/NTSC the real console runs closer to something like 49.75 and 59.81fps (varies slightly between hw versions). PCSX-ReARMed uses the former \"round\" framerates to better match modern displays, however that may cause audio/video desync in games like DDR and Spyro 2 (intro). With this option you can try to use fractional framerates.",
@@ -445,10 +457,10 @@ struct retro_core_option_v2_definition option_defs_us[] = {
          { "enabled",  NULL },
          { NULL, NULL },
       },
-      "auto",
+      "enabled",
    },
    {
-      "pcsx_rearmed_gpu_slow_llists",
+      "pcsxtreme_hd_turbo_gpu_slow_llists",
       "(GPU) Slow linked list processing",
       NULL,
       "Slower but more accurate GPU linked list processing. Needed by only a few games like Vampire Hunter D. Should be autodetected in most cases.",
@@ -460,7 +472,7 @@ struct retro_core_option_v2_definition option_defs_us[] = {
          { "enabled",  NULL },
          { NULL, NULL },
       },
-      "auto",
+      "disabled",
    },
    {
       "pcsx_rearmed_show_overscan",
@@ -539,7 +551,7 @@ struct retro_core_option_v2_definition option_defs_us[] = {
       "auto",
    },
    {
-      "pcsx_rearmed_neon_enhancement_enable",
+      "pcsxtreme_hd_turbo_neon_enhancement_enable",
       "(GPU) Enhanced Resolution",
       "Enhanced Resolution",
       "Render games that do not already run in high resolution video modes (480i, 512i) at twice the native internal resolution. Improves the fidelity of 3D models at the expense of increased performance requirements. 2D elements are generally unaffected by this setting.",
@@ -550,10 +562,10 @@ struct retro_core_option_v2_definition option_defs_us[] = {
          { "enabled",  NULL },
          { NULL, NULL },
       },
-      "disabled",
+      "enabled",
    },
    {
-      "pcsx_rearmed_neon_enhancement_no_main",
+      "pcsxtreme_hd_turbo_neon_enhancement_no_main",
       "(GPU) Enhanced Resolution Speed Hack",
       "Enh. Res. Speed Hack",
       "('Enhanced Resolution' Hack) Improves performance but reduces compatibility and may cause rendering errors.",
@@ -567,7 +579,7 @@ struct retro_core_option_v2_definition option_defs_us[] = {
       "disabled",
    },
    {
-      "pcsx_rearmed_neon_enhancement_tex_adj_v2",
+      "pcsxtreme_hd_turbo_neon_enhancement_tex_adj_v2",
       "(GPU) Enhanced Resolution Texture Adjustment",
       "Enh. Res. Texture Fixup",
       "('Enhanced Resolution' Hack) Solves some texturing issues in some games in Enhanced Resolution mode. May cause a small performance hit.",
@@ -578,7 +590,7 @@ struct retro_core_option_v2_definition option_defs_us[] = {
          { "enabled",  NULL },
          { NULL, NULL },
       },
-      "enabled",
+      "disabled",
    },
 #endif /* GPU_NEON */
 #ifdef GPU_PEOPS
@@ -802,7 +814,7 @@ struct retro_core_option_v2_definition option_defs_us[] = {
    },
 #endif /* GPU_UNAI */
    {
-      "pcsx_rearmed_spu_reverb",
+      "pcsxtreme_hd_turbo_spu_reverb",
       "Audio Reverb Effects",
       "Reverb Effects",
       "Enable emulation of the reverb feature provided by the PSX SPU. Can be disabled to improve performance at the expense of reduced audio quality/authenticity.",
@@ -816,11 +828,11 @@ struct retro_core_option_v2_definition option_defs_us[] = {
 #ifdef HAVE_PRE_ARMV7
       "disabled",
 #else
-      "enabled",
+      "disabled",
 #endif
    },
    {
-      "pcsx_rearmed_spu_interpolation",
+      "pcsxtreme_hd_turbo_spu_interpolation",
       "Sound Interpolation",
       NULL,
       "Enable emulation of the in-built audio interpolation provided by the PSX SPU. 'Gaussian' sounds closest to original hardware. 'Simple' improves performance but reduces quality. 'Cubic' has the highest performance requirements but produces increased clarity. Can be disabled entirely for maximum performance, at the expense of greatly reduced audio quality.",
@@ -836,7 +848,7 @@ struct retro_core_option_v2_definition option_defs_us[] = {
 #ifdef HAVE_PRE_ARMV7
       "off",
 #else
-      "simple",
+      "off",
 #endif
    },
    {
@@ -869,7 +881,7 @@ struct retro_core_option_v2_definition option_defs_us[] = {
    },
 #if P_HAVE_PTHREAD
    {
-      "pcsx_rearmed_spu_thread",
+      "pcsxtreme_hd_turbo_spu_thread",
       "Threaded SPU",
       NULL,
       "Emulates the PSX SPU on another CPU thread. May cause audio glitches in some games.",
@@ -880,7 +892,7 @@ struct retro_core_option_v2_definition option_defs_us[] = {
          { "enabled",  NULL },
          { NULL, NULL },
       },
-      "disabled",
+      "enabled",
    },
 #endif // P_HAVE_PTHREAD
    {
@@ -909,7 +921,7 @@ struct retro_core_option_v2_definition option_defs_us[] = {
          { "square", "Square" },
          { NULL, NULL },
       },
-      "square",
+      "circle",
    },
    {
       "pcsx_rearmed_vibration",
@@ -1583,7 +1595,7 @@ struct retro_core_option_v2_definition option_defs_us[] = {
       "1.00",
    },
    {
-      "pcsx_rearmed_icache_emulation",
+      "pcsxtreme_hd_turbo_icache_emulation",
       "Instruction Cache Emulation",
       NULL,
       "Enable emulation of the PSX CPU instruction cache. Improves accuracy at the expense of increased performance overheads. Required for Formula One 2001, Formula One Arcade and Formula One 99. [Interpreter only; partial on lightrec and ARM dynarecs]",
@@ -1594,7 +1606,7 @@ struct retro_core_option_v2_definition option_defs_us[] = {
          { "disabled", NULL },
          { NULL, NULL },
       },
-      "enabled",
+      "disabled",
    },
    {
       "pcsx_rearmed_exception_emulation",
@@ -1635,10 +1647,10 @@ struct retro_core_option_v2_definition option_defs_us[] = {
 #undef V
 #endif // _3DS
    {
-      "pcsx_rearmed_cd_turbo",
+      "pcsxtreme_hd_turbo_cd_turbo",
       "Turbo CD",
       NULL,
-      "This makes the emulated CD-ROM extremely fast and can reduce loading times in some cases. Warning: many games were not programmed to handle such a speed. The game (or even the emulator) MAY CRASH at ANY TIME if this is enabled.",
+      "Disable for R-Type Delta and similarly minded games that fail to load!  This makes the emulated CD-ROM extremely fast and can reduce loading times in some cases. Warning: many games were not programmed to handle such a speed. The game (or even the emulator) MAY CRASH at ANY TIME if this is enabled.",
       NULL,
       "speed_hack",
       {
@@ -1646,11 +1658,11 @@ struct retro_core_option_v2_definition option_defs_us[] = {
          { "enabled",  NULL },
          { NULL, NULL },
       },
-      "disabled",
+      "enabled",
    },
 #if !defined(DRC_DISABLE) && !defined(LIGHTREC)
    {
-      "pcsx_rearmed_nocompathacks",
+      "pcsxtreme_hd_turbo_nocompathacks",
       "Disable Automatic Compatibility Hacks",
       NULL,
       "By default, PCSX-ReARMed will apply auxiliary compatibility hacks automatically, based on the currently loaded content. This behaviour is required for correct operation, but may be disabled if desired.",
@@ -1661,7 +1673,7 @@ struct retro_core_option_v2_definition option_defs_us[] = {
          { "enabled",  NULL },
          { NULL, NULL },
       },
-      "disabled",
+      "enabled",
    },
    {
       "pcsx_rearmed_nosmccheck",
@@ -1678,7 +1690,7 @@ struct retro_core_option_v2_definition option_defs_us[] = {
       "disabled",
    },
    {
-      "pcsx_rearmed_gteregsunneeded",
+      "pcsxtreme_hd_turbo_gteregsunneeded",
       "(Speed Hack) Assume GTE Registers Unneeded",
       "Assume GTE Registers Unneeded",
       "May cause rendering errors.",
@@ -1689,10 +1701,10 @@ struct retro_core_option_v2_definition option_defs_us[] = {
          { "enabled",  NULL },
          { NULL, NULL },
       },
-      "disabled",
+      "enabled",
    },
    {
-      "pcsx_rearmed_nogteflags",
+      "pcsxtreme_hd_turbo_nogteflags",
       "(Speed Hack) Disable GTE Flags",
       "Disable GTE Flags",
       "Will cause rendering errors.",
@@ -1707,7 +1719,7 @@ struct retro_core_option_v2_definition option_defs_us[] = {
    },
 #endif /* !DRC_DISABLE && !LIGHTREC */
    {
-      "pcsx_rearmed_nostalls",
+      "pcsxtreme_hd_turbo_nostalls",
       "Disable CPU/GTE Stalls",
       NULL,
       "Will cause some games to run too quickly. Should be disabled in almost all cases."
@@ -1722,7 +1734,7 @@ struct retro_core_option_v2_definition option_defs_us[] = {
          { "enabled",  NULL },
          { NULL, NULL },
       },
-      "disabled",
+      "enabled",
    },
    { NULL, NULL, NULL, NULL, NULL, NULL, {{0}}, NULL },
 };

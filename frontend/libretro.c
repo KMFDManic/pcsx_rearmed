@@ -1095,8 +1095,8 @@ void retro_get_system_info(struct retro_system_info *info)
 #define GIT_VERSION ""
 #endif
    memset(info, 0, sizeof(*info));
-   info->library_name     = "PCSX-ReARMed";
-   info->library_version  = "r24l" GIT_VERSION;
+   info->library_name     = "PCSXtreme HD Turbo";
+   info->library_version  = "2K25" GIT_VERSION;
    info->valid_extensions = "bin|cue|img|mdf|pbp|toc|cbn|m3u|chd|iso|exe";
    info->need_fullpath    = true;
 }
@@ -2087,7 +2087,7 @@ static void update_variables(bool in_flight)
    }
 
    var.value = NULL;
-   var.key = "pcsx_rearmed_frameskip_interval";
+   var.key = "pcsxtreme_hd_turbo_frameskip_interval";
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
      frameskip_interval = strtol(var.value, NULL, 10);
@@ -2140,7 +2140,7 @@ static void update_variables(bool in_flight)
       {
          axis_bounds_modifier = true;
       }
-      else
+      else if (strcmp(var.value, "circle") == 0)
       {
          axis_bounds_modifier = false;
       }
@@ -2182,7 +2182,7 @@ static void update_variables(bool in_flight)
    }
 
    var.value = NULL;
-   var.key = "pcsx_rearmed_dithering";
+   var.key = "pcsxtreme_hd_turbo_dithering";
 
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
@@ -2218,7 +2218,7 @@ static void update_variables(bool in_flight)
    }
 
    var.value = NULL;
-   var.key = "pcsx_rearmed_neon_enhancement_enable";
+   var.key = "pcsxtreme_hd_turbo_neon_enhancement_enable";
 
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
@@ -2229,7 +2229,7 @@ static void update_variables(bool in_flight)
    }
 
    var.value = NULL;
-   var.key = "pcsx_rearmed_neon_enhancement_no_main";
+   var.key = "pcsxtreme_hd_turbo_neon_enhancement_no_main";
 
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
@@ -2240,7 +2240,7 @@ static void update_variables(bool in_flight)
    }
 
    var.value = NULL;
-   var.key = "pcsx_rearmed_neon_enhancement_tex_adj_v2";
+   var.key = "pcsxtreme_hd_turbo_neon_enhancement_tex_adj_v2";
 
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
@@ -2265,7 +2265,7 @@ static void update_variables(bool in_flight)
    }
 
    var.value = NULL;
-   var.key = "pcsx_rearmed_cd_turbo";
+   var.key = "pcsxtreme_hd_turbo_cd_turbo";
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
       if (strcmp(var.value, "enabled") == 0)
@@ -2276,7 +2276,7 @@ static void update_variables(bool in_flight)
 
 #if defined(HAVE_CDROM) || defined(USE_ASYNC_CDROM)
    var.value = NULL;
-   var.key = "pcsx_rearmed_cd_readahead";
+   var.key = "pcsxtreme_hd_turbo_cd_readahead";
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
       cdra_set_buf_count(strtol(var.value, NULL, 10));
@@ -2318,7 +2318,7 @@ static void update_variables(bool in_flight)
 #endif // !DRC_DISABLE
 
    var.value = NULL;
-   var.key = "pcsx_rearmed_psxclock";
+   var.key = "pcsxtreme_hd_turbo_reverse_oc";
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
       int psxclock = atoi(var.value);
@@ -2331,7 +2331,7 @@ static void update_variables(bool in_flight)
 #if !defined(DRC_DISABLE) && !defined(LIGHTREC)
 #ifdef NDRC_THREAD
    var.value = NULL;
-   var.key = "pcsx_rearmed_drc_thread";
+   var.key = "pcsxtreme_hd_turbo_drc_thread";
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
       ndrc_g.hacks &= ~(NDHACK_THREAD_FORCE | NDHACK_THREAD_FORCE_ON);
@@ -2354,7 +2354,7 @@ static void update_variables(bool in_flight)
    }
 
    var.value = NULL;
-   var.key = "pcsx_rearmed_gteregsunneeded";
+   var.key = "pcsxtreme_hd_turbo_gteregsunneeded";
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
       if (strcmp(var.value, "enabled") == 0)
@@ -2364,7 +2364,7 @@ static void update_variables(bool in_flight)
    }
 
    var.value = NULL;
-   var.key = "pcsx_rearmed_nogteflags";
+   var.key = "pcsxtreme_hd_turbo_nogteflags";
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
       if (strcmp(var.value, "enabled") == 0)
@@ -2374,7 +2374,7 @@ static void update_variables(bool in_flight)
    }
 
    var.value = NULL;
-   var.key = "pcsx_rearmed_nocompathacks";
+   var.key = "pcsxtreme_hd_turbo_nocompathacks";
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
       if (strcmp(var.value, "enabled") == 0)
@@ -2385,7 +2385,7 @@ static void update_variables(bool in_flight)
 #endif /* !DRC_DISABLE && !LIGHTREC */
 
    var.value = NULL;
-   var.key = "pcsx_rearmed_nostalls";
+   var.key = "pcsxtreme_hd_turbo_nostalls";
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
       if (strcmp(var.value, "enabled") == 0)
@@ -2395,7 +2395,7 @@ static void update_variables(bool in_flight)
    }
 
    var.value = NULL;
-   var.key = "pcsx_rearmed_icache_emulation";
+   var.key = "pcsxtreme_hd_turbo_icache_emulation";
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
       if (strcmp(var.value, "disabled") == 0)
@@ -2420,7 +2420,7 @@ static void update_variables(bool in_flight)
    //
 
    var.value = NULL;
-   var.key = "pcsx_rearmed_spu_reverb";
+   var.key = "pcsxtreme_hd_turbo_spu_reverb";
 
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
@@ -2431,7 +2431,7 @@ static void update_variables(bool in_flight)
    }
 
    var.value = NULL;
-   var.key = "pcsx_rearmed_spu_interpolation";
+   var.key = "pcsxtreme_hd_turbo_spu_interpolation";
 
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
@@ -2447,7 +2447,7 @@ static void update_variables(bool in_flight)
 
 #if P_HAVE_PTHREAD
    var.value = NULL;
-   var.key = "pcsx_rearmed_spu_thread";
+   var.key = "pcsxtreme_hd_turbo_spu_thread";
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
       if (strcmp(var.value, "enabled") == 0)
@@ -2478,7 +2478,7 @@ static void update_variables(bool in_flight)
    }
 
    var.value = NULL;
-   var.key = "pcsx_rearmed_gpu_slow_llists";
+   var.key = "pcsxtreme_hd_turbo_gpu_slow_llists";
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
       if (strcmp(var.value, "disabled") == 0)
@@ -2490,7 +2490,7 @@ static void update_variables(bool in_flight)
    }
 
    var.value = NULL;
-   var.key = "pcsx_rearmed_fractional_framerate";
+   var.key = "pcsxtreme_hd_turbo_fractional_framerate";
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
       if (strcmp(var.value, "disabled") == 0)
@@ -2542,7 +2542,7 @@ static void update_variables(bool in_flight)
    }
 
 #ifdef THREAD_RENDERING
-   var.key = "pcsx_rearmed_gpu_thread_rendering";
+   var.key = "pcsxtreme_hd_turbo_gpu_thread_rendering";
    var.value = NULL;
 
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
@@ -2864,19 +2864,26 @@ static uint16_t get_analog_button(int16_t ret, retro_input_state_t input_state_c
    return button;
 }
 
-static unsigned char axis_range_modifier(int axis_value, bool is_square)
+unsigned char axis_range_modifier(int16_t axis_value, bool is_square)
 {
-   int modifier_axis_range;
+   float modifier_axis_range = 0;
 
    if (is_square)
-      modifier_axis_range = roundf((axis_value >> 8) / 0.785f) + 128;
+   {
+      modifier_axis_range = round((axis_value >> 8) / 0.785) + 128;
+      if (modifier_axis_range < 0)
+      {
+         modifier_axis_range = 0;
+      }
+      else if (modifier_axis_range > 255)
+      {
+         modifier_axis_range = 255;
+      }
+   }
    else
-      modifier_axis_range = (axis_value >> 8) + 128;
-
-   if (modifier_axis_range < 0)
-      modifier_axis_range = 0;
-   else if (modifier_axis_range > 255)
-      modifier_axis_range = 255;
+   {
+      modifier_axis_range = MIN(((axis_value >> 8) + 128), 255);
+   }
 
    return modifier_axis_range;
 }
