@@ -22,6 +22,11 @@
 #include <switch.h>
 #endif
 
+#include "../libpcsxcore/psxcommon.h"
+
+extern float g_psxclk_scale;
+static float s_xtreme_system_clock_scale = 1.0f;
+
 #include "../libpcsxcore/misc.h"
 #include "../libpcsxcore/psxcounters.h"
 #include "../libpcsxcore/psxmem_map.h"
@@ -1138,7 +1143,7 @@ void retro_get_system_info(struct retro_system_info *info)
 #define GIT_VERSION ""
 #endif
    memset(info, 0, sizeof(*info));
-   info->library_name     = "PCSX-ReARMed";
+   info->library_name     = "PCSXtreme-Amped";
    info->library_version  = "r25" GIT_VERSION;
    info->valid_extensions = "bin|cue|img|mdf|pbp|toc|cbn|m3u|chd|iso|exe";
    info->need_fullpath    = true;
@@ -2273,7 +2278,7 @@ static void update_variables(bool in_flight)
    }
 
    var.value = NULL;
-   var.key = "pcsx_rearmed_neon_enhancement_enable";
+   var.key = "pcsxtreme_amped_neon_enhancement_enable";
 
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
@@ -2284,7 +2289,7 @@ static void update_variables(bool in_flight)
    }
 
    var.value = NULL;
-   var.key = "pcsx_rearmed_neon_enhancement_no_main";
+   var.key = "pcsxtreme_amped_neon_enhancement_no_main";
 
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
@@ -2295,7 +2300,7 @@ static void update_variables(bool in_flight)
    }
 
    var.value = NULL;
-   var.key = "pcsx_rearmed_neon_enhancement_tex_adj_v2";
+   var.key = "pcsxtreme_amped_neon_enhancement_tex_adj_v2";
 
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
@@ -2320,7 +2325,7 @@ static void update_variables(bool in_flight)
    }
 
    var.value = NULL;
-   var.key = "pcsx_rearmed_cd_turbo";
+   var.key = "pcsxtreme_amped_cd_turbo";
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
       if (strcmp(var.value, "enabled") == 0)
@@ -2331,7 +2336,7 @@ static void update_variables(bool in_flight)
 
 #if defined(HAVE_CDROM) || defined(USE_ASYNC_CDROM)
    var.value = NULL;
-   var.key = "pcsx_rearmed_cd_readahead";
+   var.key = "pcsxtreme_amped_cd_readahead";
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
       cdra_set_buf_count(strtol(var.value, NULL, 10));
@@ -2372,7 +2377,7 @@ static void update_variables(bool in_flight)
 #endif // !DRC_DISABLE
 
    var.value = NULL;
-   var.key = "pcsx_rearmed_psxclock";
+   var.key = "pcsxtreme_amped_psxclock";
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
       int psxclock = atoi(var.value);
@@ -2381,6 +2386,24 @@ static void update_variables(bool in_flight)
       else
          Config.cycle_multiplier = 10000 / psxclock;
    }
+
+    var.key = "pcsxtreme_amped_system_clockscale";
+    var.value = NULL;
+
+    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
+    {
+        long val = strtol(var.value, NULL, 10);
+        if (val < 10)  val = 10;
+        if (val > 200) val = 200;
+
+        s_xtreme_system_clock_scale = (float)val / 100.0f;
+    }
+    else
+    {
+        s_xtreme_system_clock_scale = 1.0f;
+    }
+
+    g_psxclk_scale = s_xtreme_system_clock_scale;
 
 #if !defined(DRC_DISABLE) && !defined(LIGHTREC)
 #ifdef NDRC_THREAD
@@ -2408,7 +2431,7 @@ static void update_variables(bool in_flight)
    }
 
    var.value = NULL;
-   var.key = "pcsx_rearmed_gteregsunneeded";
+   var.key = "pcsxtreme_amped_gteregsunneeded";
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
       if (strcmp(var.value, "enabled") == 0)
@@ -2439,7 +2462,7 @@ static void update_variables(bool in_flight)
 #endif /* !DRC_DISABLE && !LIGHTREC */
 
    var.value = NULL;
-   var.key = "pcsx_rearmed_nostalls";
+   var.key = "pcsxtreme_amped_nostalls";
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
       if (strcmp(var.value, "enabled") == 0)
@@ -2449,7 +2472,7 @@ static void update_variables(bool in_flight)
    }
 
    var.value = NULL;
-   var.key = "pcsx_rearmed_icache_emulation";
+   var.key = "pcsxtreme_amped_icache_emulation";
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
       if (strcmp(var.value, "disabled") == 0)

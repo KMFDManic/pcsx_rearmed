@@ -166,7 +166,7 @@ struct retro_core_option_v2_definition option_defs_us[] = {
 #if defined(HAVE_CDROM) || defined(USE_ASYNC_CDROM)
 #define V(x) { #x, NULL }
    {
-      "pcsx_rearmed_cd_readahead",
+      "pcsxtreme_amped_cd_readahead",
       "CD read-ahead",
       NULL,
       "Reads the specified amount of sectors ahead of time to try to avoid later stalls. "
@@ -188,7 +188,7 @@ struct retro_core_option_v2_definition option_defs_us[] = {
 #endif
          { NULL, NULL},
       },
-      "12",
+      "0",
    },
 #undef V
 #endif
@@ -221,19 +221,38 @@ struct retro_core_option_v2_definition option_defs_us[] = {
          { "enabled",  NULL },
          { NULL, NULL },
       },
-      "auto",
+      "enabled",
    },
 #endif
 #endif // DRC_DISABLE
    {
-      "pcsx_rearmed_psxclock",
+      "pcsxtreme_amped_psxclock",
       "PSX CPU Clock Speed (%)",
       NULL,
-      "Overclock or under-clock the PSX CPU. Should be much less than 100 (something like 57) due to some real hardware slowdowns not being emulated. Usually should be left at 'Auto', else glitches or hangs are likely.",
+      "Overclock or under-clock the PSX CPU R3000A cycle multiplier. Should be much less than 100 (something like 57) due to some real hardware slowdowns not being emulated. Usually should be left at 'Auto', else glitches or hangs are likely.",
       NULL,
       "system",
       {
          { "auto", "Auto" },
+         { "11",  NULL },
+         { "12",  NULL },
+         { "13",  NULL },
+         { "14",  NULL },
+         { "15",  NULL },
+         { "16",  NULL },
+         { "17",  NULL },
+         { "18",  NULL },
+         { "19",  NULL },
+         { "20",  NULL },
+         { "21",  NULL },
+         { "22",  NULL },
+         { "23",  NULL },
+         { "24",  NULL },
+         { "25",  NULL },
+         { "26",  NULL },
+         { "27",  NULL },
+         { "28",  NULL },
+         { "29",  NULL },         
          { "30",  NULL },
          { "31",  NULL },
          { "32",  NULL },
@@ -308,6 +327,47 @@ struct retro_core_option_v2_definition option_defs_us[] = {
          { NULL, NULL },
       },
       "auto",
+   },
+   {
+      "pcsxtreme_amped_system_clockscale",
+      "Xtreme System TurboBoost (%)",
+      NULL,
+      "Scales the whole shebang, internally, minus SPU (to best retain sound quality)! Affected; PSX system master clock (GPU, DMA, timers, VBlank, game logic ticks, rendering, scene updates, FMVs). Extreme values may cause instability, audio/synch issues.",
+      NULL,
+      "system",
+      {
+         { "10", "+90% TurboBoost" },
+         { "15", "+85% TurboBoost" },
+         { "20", "+80% TurboBoost" },
+         { "25", "+75% TurboBoost" },
+         { "30", "+70% TurboBoost" },
+         { "35", "+65% TurboBoost" },
+         { "40", "+60% TurboBoost" },
+         { "45", "+55% TurboBoost" },      
+         { "50", "+50% TurboBoost" },
+         { "55", "+45% TurboBoost" },
+         { "60", "+40% TurboBoost" },
+         { "65", "+35% TurboBoost" },
+         { "70", "+30% TurboBoost" },
+         { "75", "+25% TurboBoost" },
+         { "80", "+20% TurboBoost" },
+         { "85", "+15% TurboBoost" },
+         { "90", "+10% TurboBoost" },
+         { "95", "+5% TurboBoost" },
+         { "100", "0% TurboBoost" },
+         { "110", "-10% TurboBoost" },
+         { "120", "-20% TurboBoost" },
+         { "130", "-30% TurboBoost" },
+         { "140", "-40% TurboBoost" },
+         { "150", "-50% TurboBoost" },         
+         { "160", "-60% TurboBoost" },
+         { "170", "-70% TurboBoost" },
+         { "180", "-80% TurboBoost" },
+         { "190", "-90% TurboBoost" },
+         { "200", "-100% TurboBoost" },
+         { NULL,  NULL },
+      },
+      "85",
    },
    {
       "pcsx_rearmed_dithering",
@@ -560,7 +620,7 @@ struct retro_core_option_v2_definition option_defs_us[] = {
       "auto",
    },
    {
-      "pcsx_rearmed_neon_enhancement_enable",
+      "pcsxtreme_amped_neon_enhancement_enable",
       "(GPU) Enhanced Resolution",
       "Enhanced Resolution",
       "Render games that do not already run in high resolution video modes (480i, 512i) at twice the native internal resolution. Improves the fidelity of 3D models at the expense of increased performance requirements. 2D elements are generally unaffected by this setting.",
@@ -571,10 +631,10 @@ struct retro_core_option_v2_definition option_defs_us[] = {
          { "enabled",  NULL },
          { NULL, NULL },
       },
-      "disabled",
+      "enabled",
    },
    {
-      "pcsx_rearmed_neon_enhancement_no_main",
+      "pcsxtreme_amped_neon_enhancement_no_main",
       "(GPU) Enhanced Resolution Speed Hack",
       "Enh. Res. Speed Hack",
       "('Enhanced Resolution' Hack) Improves performance but reduces compatibility and may cause rendering errors.",
@@ -585,7 +645,7 @@ struct retro_core_option_v2_definition option_defs_us[] = {
          { "enabled",  NULL },
          { NULL, NULL },
       },
-      "disabled",
+      "enabled",
    },
    {
       "pcsx_rearmed_neon_enhancement_tex_adj_v2",
@@ -851,7 +911,7 @@ struct retro_core_option_v2_definition option_defs_us[] = {
 #ifdef HAVE_PRE_ARMV7
       "disabled",
 #else
-      "enabled",
+      "disabled",
 #endif
    },
    {
@@ -871,7 +931,7 @@ struct retro_core_option_v2_definition option_defs_us[] = {
 #ifdef HAVE_PRE_ARMV7
       "off",
 #else
-      "simple",
+      "off",
 #endif
    },
    {
@@ -915,7 +975,7 @@ struct retro_core_option_v2_definition option_defs_us[] = {
          { "enabled",  NULL },
          { NULL, NULL },
       },
-      "disabled",
+      "enabled",
    },
 #endif // P_HAVE_PTHREAD
    {
@@ -1618,7 +1678,7 @@ struct retro_core_option_v2_definition option_defs_us[] = {
       "1.00",
    },
    {
-      "pcsx_rearmed_icache_emulation",
+      "pcsxtreme_amped_icache_emulation",
       "Instruction Cache Emulation",
       NULL,
       "Enable emulation of the PSX CPU instruction cache. Improves accuracy at the expense of increased performance overheads. Required for Formula One 2001, Formula One Arcade and Formula One 99. [Interpreter only; partial on lightrec and ARM dynarecs]",
@@ -1629,7 +1689,7 @@ struct retro_core_option_v2_definition option_defs_us[] = {
          { "disabled", NULL },
          { NULL, NULL },
       },
-      "enabled",
+      "disabled",
    },
    {
       "pcsx_rearmed_exception_emulation",
@@ -1670,7 +1730,7 @@ struct retro_core_option_v2_definition option_defs_us[] = {
 #undef V
 #endif // _3DS
    {
-      "pcsx_rearmed_cd_turbo",
+      "pcsxtreme_amped_cd_turbo",
       "Turbo CD",
       NULL,
       "This makes the emulated CD-ROM extremely fast and can reduce loading times in some cases. Warning: many games were not programmed to handle such a speed. The game (or even the emulator) MAY CRASH at ANY TIME if this is enabled.",
@@ -1681,7 +1741,7 @@ struct retro_core_option_v2_definition option_defs_us[] = {
          { "enabled",  NULL },
          { NULL, NULL },
       },
-      "disabled",
+      "enabled",
    },
 #if !defined(DRC_DISABLE) && !defined(LIGHTREC)
    {
@@ -1713,7 +1773,7 @@ struct retro_core_option_v2_definition option_defs_us[] = {
       "disabled",
    },
    {
-      "pcsx_rearmed_gteregsunneeded",
+      "pcsxtreme_amped_gteregsunneeded",
       "(Speed Hack) Assume GTE Registers Unneeded",
       "Assume GTE Registers Unneeded",
       "May cause rendering errors.",
@@ -1724,7 +1784,7 @@ struct retro_core_option_v2_definition option_defs_us[] = {
          { "enabled",  NULL },
          { NULL, NULL },
       },
-      "disabled",
+      "enabled",
    },
    {
       "pcsx_rearmed_nogteflags",
@@ -1742,7 +1802,7 @@ struct retro_core_option_v2_definition option_defs_us[] = {
    },
 #endif /* !DRC_DISABLE && !LIGHTREC */
    {
-      "pcsx_rearmed_nostalls",
+      "pcsxtreme_amped_nostalls",
       "Disable CPU/GTE Stalls",
       NULL,
       "Will cause some games to run too quickly. Should be disabled in almost all cases."
@@ -1757,7 +1817,7 @@ struct retro_core_option_v2_definition option_defs_us[] = {
          { "enabled",  NULL },
          { NULL, NULL },
       },
-      "disabled",
+      "enabled",
    },
    { NULL, NULL, NULL, NULL, NULL, NULL, {{0}}, NULL },
 };
