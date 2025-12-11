@@ -27,6 +27,60 @@
 extern float g_psxclk_scale;
 static float s_xtreme_system_clock_scale = 1.0f;
 
+/* Cdrom ID from the core (SLUS_xxxx, etc.) */
+extern char CdromId[];
+
+/* Remember the last loaded game path (for filename-based hacks) */
+static char s_xtreme_game_path[1024] = { 0 };
+
+/* KMFD Xtreme – per-game hacks (R-Type Delta, Dark Forces, etc.) */
+static int s_disable_turbocd_for_game      = 0;
+static int s_disable_enhanced_res_for_game = 0;
+
+/* KMFD Xtreme – per-game hacks (R-Type Delta, Dark Forces, etc.) */
+static void pcsxtreme_apply_game_hacks(void)
+{
+   const char *id   = CdromId;
+   const char *path = s_xtreme_game_path;
+
+   /* Reset flags every time */
+   s_disable_turbocd_for_game      = 0;
+   s_disable_enhanced_res_for_game = 0;
+
+   /* ------------------------------------------------------------------ */
+   /* 1) ID-based hacks (good dumps / normal images)                     */
+   /* ------------------------------------------------------------------ */
+   if (id && id[0])
+   {
+      /* R-Type Delta (US) – SLUS_00797 (commonly "SLUS_007.97" style) */
+      if (!strncmp(id, "SLUS_0079", 9))
+         s_disable_turbocd_for_game = 1;
+
+      /* Star Wars: Dark Forces (US) – SLUS_00381 → prefix "SLUS_0038" */
+      if (!strncmp(id, "SLUS_0038", 9))
+         s_disable_enhanced_res_for_game = 1;
+   }
+
+   /* If any hack fired based on the ID, we are done. */
+   if (s_disable_turbocd_for_game || s_disable_enhanced_res_for_game)
+      return;
+
+   /* ------------------------------------------------------------------ */
+   /* 2) Fallback: filename/path-based hacks                             */
+   /*    This catches CHDs / rips / odd dumps where CdromId is useless.  */
+   /* ------------------------------------------------------------------ */
+   if (!path || !path[0])
+      return;
+
+   /* Case-insensitive substring match on the path (needs <strings.h> and
+    * _GNU_SOURCE, which are already enabled at the top of this file). */
+   if (strcasestr(path, "r-type") && strcasestr(path, "delta"))
+      s_disable_turbocd_for_game = 1;
+
+   if (strcasestr(path, "dark") && strcasestr(path, "forces"))
+      s_disable_enhanced_res_for_game = 1;
+}
+
 #include "../libpcsxcore/misc.h"
 #include "../libpcsxcore/psxcounters.h"
 #include "../libpcsxcore/psxmem_map.h"
@@ -1811,6 +1865,14 @@ static int get_bool_variable(const char *key)
 
 bool retro_load_game(const struct retro_game_info *info)
 {
+   /* Remember the game path for filename-based hacks (CHD, rips, etc.) */
+   s_xtreme_game_path[0] = '\0';
+   if (info && info->path)
+   {
+      strncpy(s_xtreme_game_path, info->path, sizeof(s_xtreme_game_path) - 1);
+      s_xtreme_game_path[sizeof(s_xtreme_game_path) - 1] = '\0';
+   }
+   
    size_t i;
    unsigned int cd_index = 0;
    bool is_m3u, is_exe;
@@ -2110,6 +2172,9 @@ static float GunconAdjustRatioY = 1;
 static void update_variables(bool in_flight)
 {
    struct retro_variable var;
+
+   /* Re-evaluate per-game hacks (uses CdromId) */
+   pcsxtreme_apply_game_hacks();
 #ifdef GPU_PEOPS
    // Always enable GPU_PEOPS_OLD_FRAME_SKIP flag
    // (this is set in standalone, with no option
@@ -2288,6 +2353,10 @@ static void update_variables(bool in_flight)
          pl_rearmed_cbs.gpu_neon.enhancement_enable = 1;
    }
 
+   /* Star Wars: Dark Forces hack: main Enhanced Resolution toggle is unsafe. */
+   if (s_disable_enhanced_res_for_game)
+      pl_rearmed_cbs.gpu_neon.enhancement_enable = 0;
+
    var.value = NULL;
    var.key = "pcsxtreme_amped_neon_enhancement_no_main";
 
@@ -2333,6 +2402,10 @@ static void update_variables(bool in_flight)
       else
          Config.TurboCD = false;
    }
+
+   /* R-Type Delta hack: Turbo CD is NOT safe here. Force it off no matter the option. */
+   if (s_disable_turbocd_for_game)
+      Config.TurboCD = false;   
 
 #if defined(HAVE_CDROM) || defined(USE_ASYNC_CDROM)
    var.value = NULL;
