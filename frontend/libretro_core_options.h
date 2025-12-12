@@ -536,7 +536,7 @@ struct retro_core_option_v2_definition option_defs_us[] = {
          { "36", NULL },
          { "39", NULL },
          { "42", NULL },
-         { "45", NULL frameskip},
+         { "45", NULL },
          { "48", NULL },
          { "51", NULL },
          { "54", NULL },
