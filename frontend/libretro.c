@@ -2185,7 +2185,7 @@ static void update_variables(bool in_flight)
    double old_fps = psxGetFps();
 
    var.value = NULL;
-   var.key = "pcsx_rearmed_frameskip_type";
+   var.key = "pcsxtreme_amped_frameskip_type";
 
    prev_frameskip_type = frameskip_type;
    frameskip_type = FRAMESKIP_NONE;
@@ -2200,23 +2200,36 @@ static void update_variables(bool in_flight)
       if (strcmp(var.value, "fixed_interval") == 0)
          frameskip_type = FRAMESKIP_FIXED_INTERVAL;
    }
-
    if (frameskip_type != 0)
       pl_rearmed_cbs.frameskip = -1;
-   
+
+   /* KMFD: Only force frameskip=1 when the user has frameskip disabled (Off/0).
+    * If the user selects auto/threshold/fixed_interval, do not override. */
+   int kmfd_force_fs_when_disabled = (frameskip_type == FRAMESKIP_NONE);
+   if (kmfd_force_fs_when_disabled)
+   {
+      frameskip_type = FRAMESKIP_FIXED_INTERVAL;
+      pl_rearmed_cbs.frameskip = 1;
+   }
+
    var.value = NULL;
-   var.key = "pcsx_rearmed_frameskip_threshold";
+   var.key = "pcsxtreme_amped_frameskip_threshold";
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
      frameskip_threshold = strtol(var.value, NULL, 10);
    }
 
    var.value = NULL;
-   var.key = "pcsx_rearmed_frameskip_interval";
+   var.key = "pcsxtreme_amped_frameskip_interval";
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
      frameskip_interval = strtol(var.value, NULL, 10);
    }   
+
+   /* KMFD: When forcing frameskip due to option Off/0, ensure a sane interval.
+    * interval=1 means "skip 1, render 1" (classic frameskip=1). */
+   if (kmfd_force_fs_when_disabled && frameskip_interval == 0)
+      frameskip_interval = 1;
 
    var.value = NULL;
    var.key = "pcsx_rearmed_region";
