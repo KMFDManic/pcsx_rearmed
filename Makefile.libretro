@@ -114,7 +114,7 @@ ifneq ($(findstring dubious ownership,$(GIT_VERSION1)),)
 DUMMY := $(shell git config --global --add safe.directory /builds/libretro/pcsx_rearmed)
 endif
 
-TARGET_NAME := pcsx_rearmed
+TARGET_NAME := km_pcsxtreme_hd_amped
 ARCH_DETECTED := $(shell $(CC) $(CFLAGS) -dumpmachine | awk -F- '{print $$1}')
 GIT_VERSION := " $(shell git rev-parse --short HEAD || echo unknown)"
 ifneq ($(GIT_VERSION)," unknown")
