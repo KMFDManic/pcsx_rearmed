@@ -172,7 +172,13 @@ extern struct PcsxSaveFuncs SaveFuncs;
 	if (Mode == 0) SaveFuncs.read(f, ptr, size); \
 }
 
-#define PSXCLK	33868800	/* 33.8688 MHz */
+#define PSXCLK_BASE 33868800  /* 33.8688 MHz */
+
+// Global runtime system clock scale (set by frontend)
+extern float g_psxclk_scale;
+
+// Scaled PSX clock used by counters/events/etc.
+#define PSXCLK ((u32)(PSXCLK_BASE * g_psxclk_scale))
 
 enum {
 	PSX_TYPE_NTSC = 0,

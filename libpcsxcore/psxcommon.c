@@ -17,6 +17,10 @@
  *   51 Franklin Street, Fifth Floor, Boston, MA 02111-1307 USA.           *
  ***************************************************************************/
 
+/* Global system clock scale (1.0 = 100%) */
+float g_psxclk_scale = 1.0f;
+
+
 #include "psxcommon.h"
 #include "r3000a.h"
 #include "psxbios.h"

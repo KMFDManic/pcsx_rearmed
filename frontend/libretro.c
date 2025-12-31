@@ -22,6 +22,11 @@
 #include <switch.h>
 #endif
 
+#include "../libpcsxcore/psxcommon.h"
+
+extern float g_psxclk_scale;
+static float s_xtreme_system_clock_scale = 1.0f;
+
 #include "../libpcsxcore/misc.h"
 #include "../libpcsxcore/psxcounters.h"
 #include "../libpcsxcore/psxmem_map.h"
@@ -2381,6 +2386,25 @@ static void update_variables(bool in_flight)
       else
          Config.cycle_multiplier = 10000 / psxclock;
    }
+
+
+    var.key = "pcsxtreme_hd_amped_system_clockscale";
+    var.value = NULL;
+
+    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
+    {
+        long val = strtol(var.value, NULL, 10);
+        if (val < 10)  val = 10;
+        if (val > 200) val = 200;
+
+        s_xtreme_system_clock_scale = (float)val / 100.0f;
+    }
+    else
+    {
+        s_xtreme_system_clock_scale = 1.0f;
+    }
+
+    g_psxclk_scale = s_xtreme_system_clock_scale;
 
 #if !defined(DRC_DISABLE) && !defined(LIGHTREC)
 #ifdef NDRC_THREAD
