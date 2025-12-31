@@ -38,6 +38,7 @@ void psxDma0(u32 madr, u32 bcr, u32 chcr);
 void psxDma1(u32 madr, u32 bcr, u32 chcr);
 void mdec0Interrupt();
 void mdec1Interrupt();
+int mdec_is_busy(void);
 int mdecFreeze(void *f, int Mode);
 
 #ifdef __cplusplus

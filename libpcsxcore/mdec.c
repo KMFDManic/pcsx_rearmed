@@ -704,6 +704,15 @@ void mdec1Interrupt() {
 	}
 }
 
+
+
+int mdec_is_busy(void)
+{
+	/* MDEC1_BUSY means an MDEC decode is still in progress.
+	 * For our purposes, we treat this as: an FMV is currently active. */
+	return (mdec.reg1 & MDEC1_BUSY) != 0;
+}
+
 int mdecFreeze(void *f, int Mode) {
 	u8 *base = (u8 *)psxM;
 	u32 v;

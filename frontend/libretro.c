@@ -23,9 +23,15 @@
 #endif
 
 #include "../libpcsxcore/psxcommon.h"
+#include "../libpcsxcore/mdec.h"
 
 extern float g_psxclk_scale;
 static float s_xtreme_system_clock_scale = 1.0f;
+
+/* KMFD: FMV handling state (Enhanced Resolution control) */
+static bool s_fmv_disable_enhancement = true;
+static bool s_fmv_active              = false;
+static int  s_fmv_prev_enhancement    = 0;
 
 #include "../libpcsxcore/misc.h"
 #include "../libpcsxcore/psxcounters.h"
@@ -2309,6 +2315,25 @@ static void update_variables(bool in_flight)
       else
          pl_rearmed_cbs.gpu_neon.enhancement_tex_adj = 0;
    }
+
+#ifdef GPU_NEON
+   var.value = NULL;
+   var.key   = "pcsxtreme_hd_amped_fmv_enhancement_mode";
+
+   if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
+   {
+      /* 'auto' = disable Enhanced Resolution during FMVs (recommended) */
+      if (strcmp(var.value, "auto") == 0)
+         s_fmv_disable_enhancement = true;
+      else /* "off" or anything else */
+         s_fmv_disable_enhancement = false;
+   }
+   else
+   {
+      /* default behavior if frontend doesn't send the variable */
+      s_fmv_disable_enhancement = true;
+   }
+#endif
 #endif
 
    var.value = NULL;
@@ -3325,6 +3350,38 @@ static void print_internal_fps(void)
    }
 }
 
+/* KMFD: Toggle Enhanced Resolution safely around FMV (MDEC) playback. */
+static void kmfd_update_fmv_state(void)
+{
+#ifdef GPU_NEON
+   if (!s_fmv_disable_enhancement)
+      return; /* user disabled FMV-safe mode */
+
+   /* Query MDEC: treat 'busy' as FMV decode ongoing */
+   if (mdec_is_busy())
+   {
+      if (!s_fmv_active)
+      {
+         /* FMV just started */
+         s_fmv_active           = true;
+         s_fmv_prev_enhancement = pl_rearmed_cbs.gpu_neon.enhancement_enable;
+
+         /* Disable Enhanced Resolution during FMV */
+         pl_rearmed_cbs.gpu_neon.enhancement_enable = 0;
+      }
+   }
+   else if (s_fmv_active)
+   {
+      /* FMV just finished */
+      s_fmv_active = false;
+
+      /* Restore previous Enhanced Resolution setting */
+      pl_rearmed_cbs.gpu_neon.enhancement_enable = s_fmv_prev_enhancement;
+   }
+#endif
+}
+
+
 void retro_run(void)
 {
    //SysReset must be run while core is running,Not in menu (Locks up Retroarch)
@@ -3338,6 +3395,8 @@ void retro_run(void)
 
    set_vout_fb();
    print_internal_fps();
+
+   kmfd_update_fmv_state();
 
    /* Check whether current frame should
     * be skipped */

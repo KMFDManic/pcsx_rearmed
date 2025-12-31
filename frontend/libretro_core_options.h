@@ -644,6 +644,21 @@ struct retro_core_option_v2_definition option_defs_us[] = {
       },
       "enabled",
    },
+
+   {
+      "pcsxtreme_hd_amped_fmv_enhancement_mode",
+      "(GPU) FMV Enhanced Resolution Hack",
+      "FMV Enhanced Resolution",
+      "Control how Enhanced Resolution behaves during full-motion video (FMV) playback. When set to 'Auto', Enhanced Resolution is temporarily disabled while FMVs are playing to reduce stutter and audio desync, then restored automatically when gameplay resumes. Set to 'Off' to always keep Enhanced Resolution enabled, even during FMVs.",
+      NULL,
+      "gpu_neon",
+      {
+         { "auto", "Auto (Disable in FMVs)" },
+         { "off",  "Off (Always Enhanced)" },
+         { NULL, NULL },
+      },
+      "auto",
+   },
 #endif /* GPU_NEON */
 #ifdef GPU_PEOPS
    {
